@@ -4,20 +4,21 @@ import com.lamarques.chainofresponsibility.DiscountHighValue
 import com.lamarques.chainofresponsibility.DiscountManager
 import com.lamarques.chainofresponsibility.DiscountMultipleItems
 import com.lamarques.chainofresponsibility.Product
+import com.lamarques.state.situation.Processing
 import com.lamarques.strategy.ImpostoICMS
 import com.lamarques.strategy.ImpostoISS
-import com.lamarques.strategy.Orcamento
+import com.lamarques.strategy.Budget
 
 fun main(args : Array<String>) {
     executeStrategy()
     executeChainOfResponsibility()
-
+    executeState()
 }
 
 private fun executeStrategy() {
-    val orcamento = Orcamento(100.0)
-    val icms = ImpostoICMS().calcular(orcamento)
-    val iss = ImpostoISS().calcular(orcamento)
+    val budget = Budget(100.0)
+    val icms = ImpostoICMS().calcular(budget)
+    val iss = ImpostoISS().calcular(budget)
 
     println("### Strategy ###")
     println("ICMS: $icms")
@@ -40,5 +41,16 @@ private fun executeChainOfResponsibility() {
     println("### Chain Of Responsibility ###")
     println("Discount by quantity: $discountOne")
     println("Discount  by value: $discountTwo")
+    println("######")
+}
+
+fun executeState() {
+    val budget = Budget(100.0)
+    println("### State ###")
+    val processingDiscount = budget.situation.calculateExtraDiscount(budget)
+    println(budget.value - processingDiscount)
+    budget.approve()
+    val approvedDiscount = budget.situation.calculateExtraDiscount(budget)
+    println(budget.value - approvedDiscount)
     println("######")
 }
