@@ -4,15 +4,19 @@ import com.lamarques.chainofresponsibility.DiscountHighValue
 import com.lamarques.chainofresponsibility.DiscountManager
 import com.lamarques.chainofresponsibility.DiscountMultipleItems
 import com.lamarques.chainofresponsibility.Product
+import com.lamarques.command.GenerateOrder
+import com.lamarques.command.Order
 import com.lamarques.state.situation.Processing
 import com.lamarques.strategy.ImpostoICMS
 import com.lamarques.strategy.ImpostoISS
 import com.lamarques.strategy.Budget
+import java.time.LocalDateTime
 
 fun main(args : Array<String>) {
     executeStrategy()
     executeChainOfResponsibility()
     executeState()
+    executeCommand()
 }
 
 private fun executeStrategy() {
@@ -52,5 +56,14 @@ fun executeState() {
     budget.approve()
     val approvedDiscount = budget.situation.calculateExtraDiscount(budget)
     println(budget.value - approvedDiscount)
+    println("######")
+}
+
+fun executeCommand() {
+    val user = "Lamarques"
+    val value = 100.0
+    val generator = GenerateOrder(user, value)
+    println("### Command ###")
+    generator.execute()
     println("######")
 }
