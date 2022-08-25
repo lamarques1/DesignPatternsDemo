@@ -5,12 +5,12 @@ import com.lamarques.chainofresponsibility.DiscountManager
 import com.lamarques.chainofresponsibility.DiscountMultipleItems
 import com.lamarques.chainofresponsibility.Product
 import com.lamarques.command.GenerateOrder
-import com.lamarques.command.Order
-import com.lamarques.state.situation.Processing
+import com.lamarques.command.actions.OrderAction
+import com.lamarques.command.actions.SaveOrderOnDatabase
+import com.lamarques.command.actions.SendEmailOrder
+import com.lamarques.strategy.Budget
 import com.lamarques.strategy.ImpostoICMS
 import com.lamarques.strategy.ImpostoISS
-import com.lamarques.strategy.Budget
-import java.time.LocalDateTime
 
 fun main(args : Array<String>) {
     executeStrategy()
@@ -62,7 +62,8 @@ fun executeState() {
 fun executeCommand() {
     val user = "Lamarques"
     val value = 100.0
-    val generator = GenerateOrder(user, value)
+    val orderActions = mutableListOf(SaveOrderOnDatabase(), SendEmailOrder())
+    val generator = GenerateOrder(user, value, orderActions)
     println("### Command ###")
     generator.execute()
     println("######")
