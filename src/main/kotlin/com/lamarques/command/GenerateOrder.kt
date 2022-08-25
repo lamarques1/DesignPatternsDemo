@@ -1,5 +1,7 @@
 package com.lamarques.command
 
+import com.lamarques.command.actions.SaveOrderOnDatabase
+import com.lamarques.command.actions.SendEmailOrder
 import com.lamarques.strategy.Budget
 import java.time.LocalDateTime
 
@@ -11,7 +13,11 @@ data class GenerateOrder(
         val budget = Budget(value)
         val order = Order(user, LocalDateTime.now(), budget)
 
-        println("Salvo no banco de dados")
-        println("Disparo de email realizado.")
+        val saveOrderOnDatabase = SaveOrderOnDatabase().run {
+            execute(order)
+        }
+        val sendEmailOrder = SendEmailOrder().run {
+            execute(order)
+        }
     }
 }
